@@ -3,7 +3,10 @@ from transformers import pipeline, MarianMTModel, MarianTokenizer
 
 class LanguageTranslator:
     def __init__(self):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = (
+            "cuda:1" if torch.cuda.is_available() and torch.cuda.device_count() > 1
+            else ("cuda" if torch.cuda.is_available() else "cpu")
+        )
         print(f"Device set to use {self.device}")
         self.model_fi = "Helsinki-NLP/opus-mt-tc-big-fi-en"
         self.model_sv = "Helsinki-NLP/opus-mt-sv-en"
@@ -54,7 +57,7 @@ if __name__ == "__main__":
     # Test Swedish
     swedish_text = "Hej där, Hi, I'm Sofia Ahonen. Mitt kort blir felar när jag försöker betala."
     print(translator.sv_to_en(swedish_text))
-    
+
     # Test batch texts
     finnish_batch = [
         "Terve, mitä kuuluu?",
