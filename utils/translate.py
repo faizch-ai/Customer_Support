@@ -1,5 +1,6 @@
 import torch
 from transformers import pipeline, MarianMTModel, MarianTokenizer
+from tqdm.auto import tqdm
 
 class LanguageTranslator:
     def __init__(self):
@@ -25,9 +26,14 @@ class LanguageTranslator:
     def fi_to_en(self, text):
         """Translate Finnish text to English using pipeline"""
         if isinstance(text, list):
-            # Batch translation
-            results = self.pipe_finnish(text)
-            return [result['translation_text'] for result in results]
+            # Batch translation with progress bar
+            results = []
+            batch_size = 32  # Adjust based on your GPU memory
+            for i in tqdm(range(0, len(text), batch_size), desc="Translating Finnish"):
+                batch = text[i:i + batch_size]
+                batch_results = self.pipe_finnish(batch)
+                results.extend([result['translation_text'] for result in batch_results])
+            return results
         else:
             # Single translation
             result = self.pipe_finnish(text)
@@ -36,10 +42,17 @@ class LanguageTranslator:
     def sv_to_en(self, text):
         """Translate Swedish text to English using Marian model"""
         if isinstance(text, list):
-            # Batch translation
-            batch = self.tok_sv(text, return_tensors="pt", padding=True).to(self.device)
-            out = self.model_sv_loaded.generate(**batch, max_length=256)
-            return self.tok_sv.batch_decode(out, skip_special_tokens=True)
+            # Batch translation with progress bar
+            results = []
+            batch_size = 32  # Adjust based on your GPU memory
+            
+            for i in tqdm(range(0, len(text), batch_size), desc="Translating Swedish"):
+                batch = text[i:i + batch_size]
+                tokenized_batch = self.tok_sv(batch, return_tensors="pt", padding=True).to(self.device)
+                out = self.model_sv_loaded.generate(**tokenized_batch, max_length=256)
+                batch_results = self.tok_sv.batch_decode(out, skip_special_tokens=True)
+                results.extend(batch_results)
+            return results
         else:
             # Single translation
             batch = self.tok_sv([text], return_tensors="pt", padding=True).to(self.device)
