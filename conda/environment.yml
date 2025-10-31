@@ -2,6 +2,7 @@
 name: customer-support-ai
 channels:
   - pytorch
+  - nvidia
   - conda-forge
   - defaults
 dependencies:
@@ -9,7 +10,7 @@ dependencies:
   - pytorch=2.1.0
   - torchvision=0.16.0
   - torchaudio=2.1.0
-  - pytorch-cuda=11.8
+  - cudatoolkit=11.8
   - pandas=2.1.0
   - numpy=1.24.0
   - scikit-learn=1.3.0
