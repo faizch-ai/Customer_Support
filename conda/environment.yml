@@ -25,12 +25,10 @@ dependencies:
     - streamlit==1.28.0
     - flask==2.3.0
     - plotly==5.15.0
-    - bertopic==0.15.0
-    - umap-learn==0.5.3
-    - hdbscan==0.8.29
     - accelerate==0.24.0
     - datasets==2.14.0
     - evaluate==0.4.0
     - nltk==3.8.1
     - tqdm==4.66.0
     - requests==2.31.0
+    - scikit-learn-extra  # Alternative to hdbscan
