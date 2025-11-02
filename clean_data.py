@@ -15,10 +15,9 @@ def main():
     cleaned_data = cleaner.process_dataframe(data)
 
     print("Cleaning completed!")
-    print(f"Language distribution:\n{cleaned_data['detected_language'].value_counts()}")
 
     # Save cleaned data
-    cleaned_data.to_csv('/home/faiz/Documents/github/Customer_Support/data/customer_support_tickets.csv', index=False)
+    cleaned_data.to_csv('/home/faiz/Documents/github/Customer_Support/data/customer_support_tickets---full.csv', index=False)
     print("Cleaned data saved to CSV!")
 
 if __name__ == "__main__":
